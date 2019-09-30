@@ -5,6 +5,8 @@ import Board from "./components/Board";
 import NotFound from "./components/NotFound";
 
 import clsx from "clsx";
+
+// material ui components
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,13 +18,9 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 
 import HomeIcon from "@material-ui/icons/Home";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -33,6 +31,7 @@ import PeopleIcon from "@material-ui/icons/People";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
 import axios from "axios";
+import HeaderAndSideBar from "./components/HeaderAndSideBar";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
@@ -67,6 +66,13 @@ const useStyles = makeStyles(theme => ({
 	content: {
 		flexGrow: 1,
 		padding: theme.spacing(3)
+	},
+	drawerHeader: {
+		display: "flex",
+		alignItems: "center",
+		padding: theme.spacing(0, 1),
+		...theme.mixins.toolbar,
+		justifyContent: "flex-end"
 	}
 }));
 
@@ -74,7 +80,7 @@ const App = props => {
 	const { container } = props;
 	const classes = useStyles();
 	const theme = useTheme();
-	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const [mobileOpen, setMobileOpen] = useState(false);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -125,67 +131,7 @@ const App = props => {
 		<Router>
 			<div className={classes.root}>
 				<CssBaseline />
-				<AppBar
-					position="fixed"
-					className={clsx(classes.appBar, {
-						[classes.appBarShift]: mobileOpen
-					})}
-				>
-					<Toolbar>
-						<IconButton
-							color="inherit"
-							aria-label="open drawer"
-							onClick={handleDrawerToggle}
-							edge="start"
-							className={clsx(
-								classes.menuButton,
-								mobileOpen && classes.hide
-							)}
-						>
-							<MenuIcon />
-						</IconButton>
-						<Typography variant="h6" noWrap>
-							Persistent drawer
-						</Typography>
-					</Toolbar>
-				</AppBar>
-				<nav className={classes.drawer} aria-label="mailbox folders">
-					<Hidden smUp implementation="css">
-						<Drawer
-							container={container}
-							variant="temporary"
-							anchor={
-								theme.direction === "rtl" ? "right" : "left"
-							}
-							open={mobileOpen}
-							classes={{
-								paper: classes.drawerPaper
-							}}
-							ModalProps={{
-								keepMounted: true // Better open performance on mobile.
-							}}
-						>
-							{drawer}
-						</Drawer>
-					</Hidden>
-					<Hidden xsDown implementation="css">
-						<Drawer
-							classes={{
-								paper: classes.drawerPaper
-							}}
-							variant="permanent"
-							open
-						>
-							{drawer}
-						</Drawer>
-					</Hidden>
-				</nav>
-				{/* <main
-						className={clsx(classes.content, {
-							[classes.contentShift]: open
-						})}
-					>
-						<div className={classes.drawerHeader} /> */}
+				<HeaderAndSideBar useStyles={useStyles} />
 				<main className={classes.content}>
 					<div className={classes.toolbar} />
 					{switchPart}

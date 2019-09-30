@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import PropTypes from "prop-types";
 
-class Post extends Component {
+class PostDetail extends Component {
 	state = {}
 
 	componentDidMount() {
@@ -43,8 +43,8 @@ class Post extends Component {
 	}
 }
 
-Post.propTypes = {
+PostDetail.propTypes = {
 	post: PropTypes.object.isRequired
 };
 
-export default Post;
+export default PostDetail;
