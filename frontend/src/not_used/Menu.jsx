@@ -5,7 +5,7 @@ import axios from "axios";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-class MenuBar extends Component {
+class Header extends Component {
 	activeStyle = {
 		color: "green",
 		fontSize: "1.5rem"
@@ -77,4 +77,4 @@ class MenuBar extends Component {
 	};
 }
 
-export default MenuBar;
+export default Header;

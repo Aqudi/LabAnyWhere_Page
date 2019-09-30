@@ -18,13 +18,13 @@ class Board extends Component {
 
 	componentDidMount() {
 		console.log("Board ComponentDidMount");
-		this._getPosts(this.props.match.params.category);
+		this._getPosts(this.props.category);
 	}
 
 	componentDidUpdate(prevProps) {
 		console.log("Board ComponentDidUpdate");
-		if (this.props.match.params.category !== prevProps.match.params.category) {
-			this._getPosts(this.props.match.params.category);
+		if (this.props.category !== prevProps.category) {
+			this._getPosts(this.props.category);
 		}
 	}
 
@@ -34,9 +34,9 @@ class Board extends Component {
 
 	static getDerivedStateFromProps(nextProps, prevState) {
 		console.log("Board getDerivedStateFromProps");
-		if (nextProps.match.params.category !== prevState.category) {
+		if (nextProps.category !== prevState.category) {
 			return {
-				category: nextProps.match.params.category,
+				category: nextProps.category,
 			};
 		}
 		return null;
@@ -44,7 +44,7 @@ class Board extends Component {
 
 	shouldComponentUpdate(nextProps, nextState) {
 		console.log("Board shouldComponentUpdate");
-		if (nextProps.match.params.category === nextState.category) {
+		if (nextProps.category === nextState.category) {
 			return true;
 		}
 		return false;
@@ -55,7 +55,7 @@ class Board extends Component {
 		// console.log("state > \n", this.state);
 		// console.log("props > \n", this.props);
 		const { textList } = this.state;
-		const { category } = this.props.match.params;
+		const { category } = this.props;
 		return (
 			<>
 				<div>
