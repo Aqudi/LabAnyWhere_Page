@@ -23,7 +23,9 @@ class Board extends Component {
 
 	componentDidUpdate(prevProps) {
 		console.log("Board ComponentDidUpdate");
-		if (this.props.match.params.category !== prevProps.match.params.category) {
+		if (
+			this.props.match.params.category !== prevProps.match.params.category
+		) {
 			this._getPosts(this.props.match.params.category);
 		}
 	}
@@ -36,7 +38,7 @@ class Board extends Component {
 		console.log("Board getDerivedStateFromProps");
 		if (nextProps.match.params.category !== prevState.category) {
 			return {
-				category: nextProps.match.params.category,
+				category: nextProps.match.params.category
 			};
 		}
 		return null;
@@ -55,11 +57,12 @@ class Board extends Component {
 		// console.log("state > \n", this.state);
 		// console.log("props > \n", this.props);
 		const { textList } = this.state;
+		console.log("textList", textList)
 		const { category } = this.props.match.params;
 		return (
 			<>
 				<div>
-					<h1>게시판 : {category}</h1>
+					<h1>게시판 : {category ? category : "All"}</h1>
 				</div>
 				<PostList posts={textList}></PostList>
 			</>
@@ -78,7 +81,8 @@ class Board extends Component {
 		axios
 			.get(URL)
 			.then(res => {
-				// console.log(res.data);
+				console.log("End Point: ", URL);
+				console.log(data);
 				if (!isIterable(res.data)) {
 					data = [res.data];
 				} else {
@@ -88,8 +92,7 @@ class Board extends Component {
 				this.setState({ textList: data });
 			})
 			.catch(err => console.log(err));
-		console.log("End Point: ", URL);
-		console.log(data);
+
 		return data;
 	};
 }

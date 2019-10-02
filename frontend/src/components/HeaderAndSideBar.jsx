@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 
 import clsx from "clsx";
@@ -31,11 +31,22 @@ import axios from "axios";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-const HeaderAndSideBar = props => {
+const HeaderAndSideBar = memo(props => {
 	const { container } = props;
 	const classes = props.useStyles();
 	const theme = useTheme();
 	const [mobileOpen, setMobileOpen] = useState(false);
+	const [categoryInfo, setCategoryInfo] = useState([]);
+
+	const iconPathList = [
+		[<HomeIcon />, "/"],
+		[<DescriptionIcon />, "/posts"],
+		[<AnnouncementIcon />, "/posts/notice"],
+		[<EcoIcon />, "/posts/envs"],
+		[<MenuBookIcon />, "/posts/lecture"],
+		[<PeopleIcon />, "/people"],
+		[<GetAppIcon />, "/posts/etc"]
+	];
 
 	const handleDrawerToggle = e => {
 		setMobileOpen(!mobileOpen);
@@ -44,15 +55,29 @@ const HeaderAndSideBar = props => {
 		setMobileOpen(false);
 	};
 
-	const pageList = [
-		["Home", <HomeIcon />, "/"],
-		["Posts", <DescriptionIcon />, "/posts"],
-		["Notice", <AnnouncementIcon />, "/posts/notice"],
-		["envs", <EcoIcon />, "/posts/envs"],
-		["lecture", <MenuBookIcon />, "/posts/lecture"],
-		["people", <PeopleIcon />, "/posts/people"],
-		["etc", <GetAppIcon />, "/posts/etc"]
-	];
+	const getCategoryInfo = () => {
+		axios
+			.get("http://localhost:8000/posts/category")
+			.then(res => {
+				let data = [];
+				["Home", "Posts"]
+					.concat(res.data.category_list)
+					.map((info, index) => {
+						return data = [...data, [info, ...iconPathList[index]]];
+					});
+				setCategoryInfo(() => {
+					console.log("set!");
+					return data;
+				});
+			})
+			.catch(e => {
+				console.log(e);
+			});
+	};
+
+	useEffect(() => {
+		getCategoryInfo();
+	}, [0]);
 
 	const drawer = (
 		<div>
@@ -60,15 +85,15 @@ const HeaderAndSideBar = props => {
 				<div className={classes.toolbar} />
 			</Hidden>
 			<Hidden smUp implementation="css">
-			<div className={classes.drawerHeader}>
-				<IconButton onClick={handleDrawerClose}>
-					<ChevronLeftIcon />
-				</IconButton>
+				<div className={classes.drawerHeader}>
+					<IconButton onClick={handleDrawerClose}>
+						<ChevronLeftIcon />
+					</IconButton>
 				</div>
 			</Hidden>
 			<Divider />
 			<List>
-				{pageList.map((page, index) => (
+				{categoryInfo.map((page, index) => (
 					// 0 : text, 1 : icon, 2 : path
 					<ListItem
 						button
@@ -141,6 +166,6 @@ const HeaderAndSideBar = props => {
 			</nav>
 		</>
 	);
-};
+});
 
 export default HeaderAndSideBar;
